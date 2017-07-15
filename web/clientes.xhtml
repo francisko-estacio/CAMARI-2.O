@@ -1,0 +1,275 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/admin.xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:define name="head">
+        <title>LISTA DE LOS CLIENTES</title>
+    </ui:define>
+
+    <ui:define name="logo-lg">
+       
+    </ui:define>
+
+    <ui:define name="logo-mini">
+       
+    </ui:define>
+
+    <ui:define name="menu">
+         <ui:include src="/includes/menu.xhtml"/>
+     </ui:define>
+
+    <ui:define name="top-menu">
+        <ui:include src="/includes/top-bar.xhtml"/>
+    </ui:define>
+
+      <ui:define name="title">
+        <h2 class="align-center">
+            CAMARI TU TIENDA EN LINEA
+        </h2>
+    </ui:define>
+
+    <ui:define name="description">
+        A page description
+    </ui:define>
+    
+    
+    
+    
+
+    <ui:define name="body">
+    	<h2>
+          
+        <h:form id="frmClientes">
+
+            
+            <p:panel id="pnlClientes">
+
+                <p:dataTable 
+
+                    id="tblClientes" 
+                    value="#{cCliente.lista}"
+                    var="cli" 
+                    selectionMode="single"
+                    selection="#{cCliente.selectedCliente}" 
+                    rowKey="#{cli.id_cliente}">
+
+                    <p:column 
+                        headerText="Id" 
+                        style="width: 20%">
+                        <h:outputText value="#{cli.id_cliente}" />
+                    </p:column>
+
+
+                    <p:column 
+                        headerText="Ruc" 
+                        style="width: 20%">
+                        <h:outputText value="#{cli.ruc}"/>
+                    </p:column>
+
+
+                    <p:column 
+                        headerText="Nombre" 
+                        style="width: 20%">
+                        <h:outputText value="#{cli.nombre}"/>
+                    </p:column>
+
+
+                    <p:column 
+                        headerText="Dirección" 
+                        style="width: 20%">
+                        <h:outputText value="#{cli.direccion}"/>
+        
+                    </p:column>
+
+                    <f:facet name="footer">
+                        <p:commandButton id="btnNuevo" value="Nuevo" oncomplete="PF('wdlgNuevo').show();" />
+                        <p:commandButton id="btnModificar" value="Modificar" oncomplete="PF('wdlgModificar').show();" update=":frmModificarCliente" />
+                        <p:commandButton id="btnEliminar" value="Eliminar" oncomplete="PF('wdlgEliminar').show();" update=":frmEliminarCliente"/>
+
+                    </f:facet>
+
+                </p:dataTable>
+
+            </p:panel>
+            
+        </h:form>
+
+
+
+        <p:dialog 
+            id="dlgAgregar" 
+            header="Nuevo Cliente"
+            widgetVar="wdlgNuevo" 
+            modal="true"
+            resizable="false" 
+            showEffect="clip"
+            hideEffect="fold">
+
+            <h:form id="frmNuevoCliente">
+
+                <p:panelGrid 
+
+                    id="pngNuevoCliente" 
+                    columns="2">
+                    
+
+                    <h:outputText value="Ruc" />
+                    <p:inputText 
+                        required="true"
+                        requiredMessage="Se requiere un número de RUC"
+                        value="#{cCliente.newCliente.ruc}" />   
+
+                    <h:outputText value="Nombre" />
+                    <p:inputText 
+                        required="true"
+                        requiredMessage="Se requiere un nombre de cliente"
+                        value="#{cCliente.newCliente.nombre}" />
+
+                    <h:outputText value="Dirección" />
+                    <p:inputText 
+                        required="true"
+                        requiredMessage="Se requiere una dirección"
+                        value="#{cCliente.newCliente.direccion}" />
+
+
+                </p:panelGrid>
+
+                <p:commandButton 
+                    value="Ingresar"
+                    action="#{cCliente.insertar()}"                 
+                    update=":frmClientes:pnlClientes :frmNuevoCliente" 
+                    onclick="wdlgNuevo.hide();"/>   
+
+                <p:commandButton 
+                    value="Cancelar"
+                    immediate="true"
+                    oncomplete="PF('wdlgNuevo').hide();"
+                    type="reset"/>
+            </h:form>
+        </p:dialog>  
+
+
+
+
+        <p:dialog 
+            id="dlgModificar" 
+            header="Modificar Cliente"
+            widgetVar="wdlgModificar" 
+            modal="true"
+            resizable="false" 
+            showEffect="clip"
+            hideEffect="fold">
+
+            <h:form id="frmModificarCliente">
+                <p:panelGrid id="pngModificarCliente" columns="2">
+
+                    <h:outputText value="Código" />
+                    <p:inputText 
+                        required="true" 
+                        readonly="true"
+                        value="#{cCliente.selectedCliente.id_cliente}" />
+
+                    <h:outputText 
+                        value="RUC" />
+                    <p:inputText 
+                        required="true"
+                        requiredMessage="Se requiere un número de RUC"
+                        value="#{cCliente.selectedCliente.ruc}" /> 
+
+                    <h:outputText 
+                        value="Nombre" />
+                    <p:inputText 
+                        required="true"
+                        requiredMessage="Se requiere un nombre"
+                        value="#{cCliente.selectedCliente.nombre}" />  
+
+                    <h:outputText 
+                        value="Dirección" />
+                    <p:inputText 
+                        required="true"
+                        requiredMessage="Se requiere una dirección"
+                        value="#{cCliente.selectedCliente.direccion}" />  
+
+                </p:panelGrid>
+
+
+                <p:commandButton 
+                    value="Modificar"
+                    action="#{cCliente.modificar()}"
+                    update=":frmClientes:pnlClientes frmModificarCliente"
+                    onclick="wdlgModificar.hide()"/>
+                <p:commandButton 
+                    value="Cancelar" 
+                    onclick="wdlgModificar.hide()"
+                    type="reset" />
+            </h:form>
+        </p:dialog>
+
+
+
+
+
+
+        <p:dialog 
+            id="dlgEliminar" 
+            header="Eliminar Cliente"
+            widgetVar="wdlgEliminar" 
+            modal="true"
+            resizable="false" 
+            showEffect="clip"
+            hideEffect="fold">
+            
+            <h:form id="frmEliminarCliente">
+                <p:panelGrid id="pngEliminarClienter" columns="2">
+                    <h:outputText value="Código" />
+                    <h:outputText value="#{cCliente.selectedCliente.id}" />
+                    <h:outputText value="Ruc" />
+                    <h:outputText value="#{cCliente.selectedCliente.ruc}" />
+                    <h:outputText value="Nombre" />
+                    <h:outputText value="#{cCliente.selectedCliente.nombre}" />
+                    <h:outputText value="Direccion" />
+                    <h:outputText value="#{cCliente.selectedCliente.direccion}" />
+
+                </p:panelGrid>
+
+                <p:commandButton 
+                    value="Eliminar"
+                    action="#{cCliente.eliminar()}"
+                    update=":frmClientes:pnlClientes :frmEliminarCliente" 
+                    onclick="wdlgEliminar.hide()"/>
+
+                <p:commandButton 
+                    value="Cancelar" 
+                    onclick="wdlgEliminar.hide()"
+                    type="reset" />
+            </h:form>
+        </p:dialog> 
+
+        </h2>
+    </ui:define>
+    
+    
+    
+    
+    
+
+
+    <ui:define name="footer">
+          <a target="_blank"
+           href="https://github.com/adminfaces/">
+            Copyright (C) 2017 - AdminFaces
+        </a>
+
+        <div class="pull-right hidden-xs" style="color: gray">
+            <i>1.0.0</i>
+        </div>
+    </ui:define>
+
+
+</ui:composition>
+
